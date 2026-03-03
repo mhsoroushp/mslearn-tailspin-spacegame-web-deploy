@@ -93,7 +93,7 @@ stages:
               inputs:
                 azureSubscription: 'Subscription_cicd(1)(c78e9653-2dd1-49b6-bd4b-fdc49529105f)'
                 appType: 'webAppLinux'
-                appName: 'tailspin-space-game-web-dev-29972'
+                appName: '$(WebAppNameDev)'
                 deployToSlotOrASE: true
                 resourceGroupName: 'tailspin-space-game-rg'
                 slotName: 'production'
