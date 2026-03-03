@@ -129,10 +129,11 @@ stages:
     dependsOn: Staging
     condition: succeeded()
     jobs:
-    - job: Echo
-      displayName: 'Production echo'
+    - job: DeployProduction
+      displayName: 'Deploy to the production environment'
       pool:
         vmImage: 'ubuntu-22.04'
+      environment: production
       steps:
       - script: echo 'Ready for production deployment.'
         displayName: 'Echo message'
