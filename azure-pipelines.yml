@@ -123,3 +123,17 @@ stages:
                 resourceGroupName: 'tailspin-space-game-rg'
                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
                 runtimeStack: 'DOTNETCORE|8.0'
+
+  - stage: 'Production'
+    displayName: 'Deploy to the production environment'
+    dependsOn: Staging
+    condition: succeeded()
+    jobs:
+    - job: Approval
+      displayName: 'Wait for approval'
+      pool: server
+      steps:
+      - task: ManualValidation@0
+        inputs:
+          notifyUsers: ''
+          instructions: 'Ready for production deployment.'
