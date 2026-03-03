@@ -129,11 +129,10 @@ stages:
     dependsOn: Staging
     condition: succeeded()
     jobs:
-    - job: Approval
-      displayName: 'Wait for approval'
-      pool: server
+    - job: Echo
+      displayName: 'Production echo'
+      pool:
+        vmImage: 'ubuntu-22.04'
       steps:
-      - task: ManualValidation@0
-        inputs:
-          notifyUsers: ''
-          instructions: 'Ready for production deployment.'
+      - script: echo 'Ready for production deployment.'
+        displayName: 'Echo message'
