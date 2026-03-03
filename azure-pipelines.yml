@@ -82,7 +82,7 @@ stages:
         vmImage: 'ubuntu-22.04'
       environment: dev
       variables:
-      - group: Release
+      - group: 'Release'
       strategy:
         runOnce:
           deploy:
@@ -94,8 +94,32 @@ stages:
                 azureSubscription: 'Subscription_cicd(1)(c78e9653-2dd1-49b6-bd4b-fdc49529105f)'
                 appType: 'webAppLinux'
                 appName: '$(WebAppNameDev)'
-                deployToSlotOrASE: true
                 resourceGroupName: 'tailspin-space-game-rg'
-                slotName: 'production'
+                package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+                runtimeStack: 'DOTNETCORE|8.0'
+  
+  - stage: 'Staging'
+    displayName: 'Deploy to the staging environment'
+    dependsOn: Dev
+    condition: succeeded()
+    jobs:
+    - deployment: Deploy
+      pool:
+        vmImage: 'ubuntu-22.04'
+      environment: staging
+      variables:
+      - group: 'Release'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+            - task: AzureWebApp@1
+              inputs:
+                azureSubscription: 'Subscription_cicd(1)(c78e9653-2dd1-49b6-bd4b-fdc49529105f)'
+                appType: 'webAppLinux'
+                appName: '$(WebAppNameStaging)'
+                resourceGroupName: 'tailspin-space-game-rg'
                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
                 runtimeStack: 'DOTNETCORE|8.0'
